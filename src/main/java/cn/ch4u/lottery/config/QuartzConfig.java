@@ -18,7 +18,7 @@ public class QuartzConfig {
     }
     @Bean
     public Trigger GetLotteryDataJobTrigger() {
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0/5 * * * * ? *");
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 0 0/1 * * ? *");
         return TriggerBuilder.newTrigger()
                 .forJob(GetLotteryDataJobDetail())//关联上述的JobDetail
                 .withIdentity("quartzTaskService")//给Trigger起个名字

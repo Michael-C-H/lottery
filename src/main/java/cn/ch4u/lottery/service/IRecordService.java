@@ -14,5 +14,13 @@ import java.util.List;
  * @since 2020-05-28
  */
 public interface IRecordService extends IService<Record> {
+    /**
+     * 批量添加记录（类型+期号排重）
+     * @param list
+     */
     void addBatchUnique(List<Record> list);
+    /**
+     * 填充历史数据
+     */
+    void fillHistory();
 }

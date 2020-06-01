@@ -1,5 +1,5 @@
 server:
-  port: 2526
+  port: 80
 
 spring:
   datasource:
@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/lottery?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 12qwaszxQq
+    password: 12qwaszxQq!@#
     filters: stat
     maxActive: 20
     initialSize: 1
@@ -26,4 +26,4 @@ spring:
 #自定义配置
 custom:
   config:
-    dataSrc: JUHE
+    dataSrc : JUHE

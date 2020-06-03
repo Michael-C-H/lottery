@@ -159,7 +159,7 @@ public class LotteryDataSrcJuheImpl extends BaseLotteryDataSrc {
                     page++;
                     //最后一页获取
                     if (page*pageSize>count){
-                        pageSize=pageSize-page*pageSize-count;
+                        pageSize=pageSize-page*pageSize+count;
                     }
                 } catch (Exception e) {
                     logger.error("获取" + typeEnum.getName() + "数据,page="+page+";pageSize"+pageSize+"出错：" + e.getMessage(), e);

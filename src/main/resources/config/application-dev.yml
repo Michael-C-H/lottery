@@ -27,4 +27,4 @@ spring:
 custom:
   config:
     dataSrc : JUHE
-    needRecords : 120
+    needRecords : 56

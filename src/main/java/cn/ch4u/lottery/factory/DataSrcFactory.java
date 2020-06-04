@@ -22,7 +22,7 @@ public class DataSrcFactory implements ApplicationContextAware {
         map.forEach((key, value) -> DataSrcBeanMap.put(value.findSrcCode(), value));
     }
  
-    public static <T extends ILotteryDataSrc> T getDataSrc(DataSrcEnum code) {
+    public static <T extends ILotteryDataSrc> T getInstance(DataSrcEnum code) {
         return (T)DataSrcBeanMap.get(code);
     }
  

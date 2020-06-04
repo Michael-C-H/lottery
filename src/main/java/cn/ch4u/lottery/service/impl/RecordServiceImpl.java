@@ -1,14 +1,17 @@
 package cn.ch4u.lottery.service.impl;
 
 import cn.ch4u.lottery.constant.LotteryTypeEnum;
+import cn.ch4u.lottery.entity.RecommendRes;
 import cn.ch4u.lottery.entity.Record;
 import cn.ch4u.lottery.mapper.RecordMapper;
 import cn.ch4u.lottery.service.ILotteryDataSrc;
+import cn.ch4u.lottery.service.ILotteryRecommend;
 import cn.ch4u.lottery.service.IRecordService;
 import cn.ch4u.lottery.util.KwHelper;
 import cn.ch4u.lottery.util.LotteryUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +75,23 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         if (!KwHelper.isNullOrEmpty(list)){
             this.saveBatch(list);
         }
+    }
+
+    @Override
+    public RecommendRes recommend(LotteryTypeEnum typeEnum) {
+        if (typeEnum == null) return null;
+        //获取类型的历史数据
+        QueryWrapper<Record> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("typeKey",typeEnum.getKey()).orderByDesc("periodNo");
+        Page<Record> page=new Page<>(1,findNeedleastRecords(),false);
+        Page<Record> plist=this.page(page,queryWrapper);
+        if (plist == null)return null;
+        List<Record> list=plist.getRecords();
+        if (KwHelper.isNullOrEmpty(list)) return null;
+        //获取数据
+        ILotteryRecommend srcApi= LotteryUtil.getLotteryRecommend(env);
+        if (srcApi==null)return null;
+        return srcApi.recommend(typeEnum,list);
     }
 
 

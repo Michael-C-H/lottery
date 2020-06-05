@@ -6,6 +6,7 @@ import cn.ch4u.lottery.entity.RecommendRes;
 import cn.ch4u.lottery.entity.Record;
 import cn.ch4u.lottery.service.ILotteryRecommend;
 import cn.ch4u.lottery.util.KwHelper;
+import cn.ch4u.lottery.util.LotteryUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +73,14 @@ public class LotteryRecommendLowRate implements ILotteryRecommend {
                         }
                     }
                     //map根据value排序
+                    Map<Integer,Integer> smap= LotteryUtil.sortMapByValues(map,true);
                     //遍历map，取前plen个数字，放入结果
+                    int addNum=1;
+                    for(Integer key : smap.keySet()) {
+                        if (addNum>plen)break;;
+                        res.addRes(key);
+                        addNum++;
+                    }
                 }
             }
         }

@@ -10,6 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class LotteryUtil {
     private final static Logger logger = LoggerFactory.getLogger(LotteryUtil.class);
 
@@ -68,5 +73,22 @@ public class LotteryUtil {
         }
         recommend=srcApi;
         return srcApi;
+    }
+
+    /**
+     * 根据map的value对集合进行排序
+     * @param aMap 要排序的集合
+     * @param isDesc 是否是降序
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K extends Comparable, V extends Comparable> Map<K, V> sortMapByValues(Map<K, V> aMap, boolean isDesc) {
+        HashMap<K, V> finalOut = new LinkedHashMap<>();
+        aMap.entrySet()
+                .stream()
+                .sorted((p1, p2) -> isDesc?p2.getValue().compareTo(p1.getValue()):p1.getValue().compareTo(p2.getValue()))
+                .collect(Collectors.toList()).forEach(ele -> finalOut.put(ele.getKey(), ele.getValue()));
+        return finalOut;
     }
 }

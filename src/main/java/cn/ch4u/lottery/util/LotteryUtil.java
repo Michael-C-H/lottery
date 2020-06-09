@@ -1,25 +1,20 @@
 package cn.ch4u.lottery.util;
 
 import cn.ch4u.lottery.constant.DataSrcEnum;
-import cn.ch4u.lottery.constant.RecommendEnum;
+import cn.ch4u.lottery.entity.RecommendRes;
 import cn.ch4u.lottery.factory.DataSrcFactory;
-import cn.ch4u.lottery.factory.RecommendFactory;
 import cn.ch4u.lottery.service.ILotteryDataSrc;
-import cn.ch4u.lottery.service.ILotteryRecommend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LotteryUtil {
     private final static Logger logger = LoggerFactory.getLogger(LotteryUtil.class);
 
     private static ILotteryDataSrc dataSrc=null;
-    private static ILotteryRecommend recommend=null;
 
 
     /**
@@ -50,30 +45,6 @@ public class LotteryUtil {
         return srcApi;
     }
 
-    /**
-     * 获取推荐类型api
-     * @param env 环境
-     * @return
-     */
-    public static ILotteryRecommend getLotteryRecommend(Environment env){
-        if (recommend!=null) return recommend;
-        String src="low_rate";
-        if (KwHelper.isNullOrEmpty(env.getProperty("custom.config.recommend"))){
-            src=env.getProperty("custom.config.recommend");
-        }
-        RecommendEnum srcEnum=RecommendEnum.getEnumByKey(src);
-        if (srcEnum==null){
-            logger.warn("推荐算法获取错误，请检查配置，当前获取配置："+src);
-            return null;
-        }
-        ILotteryRecommend srcApi= RecommendFactory.getInstance(srcEnum);
-        if (srcApi==null){
-            logger.warn("推荐算法实现类获取错误，请检查配置，当前获取配置："+src);
-            return null;
-        }
-        recommend=srcApi;
-        return srcApi;
-    }
 
     /**
      * 根据map的value对集合进行排序
@@ -90,5 +61,19 @@ public class LotteryUtil {
                 .sorted((p1, p2) -> isDesc?p2.getValue().compareTo(p1.getValue()):p1.getValue().compareTo(p2.getValue()))
                 .collect(Collectors.toList()).forEach(ele -> finalOut.put(ele.getKey(), ele.getValue()));
         return finalOut;
+    }
+
+    /**
+     * 对推荐结果进行分段升序排序
+     * @param res
+     */
+    public static void sortRes(RecommendRes res){
+        if (res==null||KwHelper.isNullOrEmpty(res.getRes()))return;
+        List<Integer> oldList=res.getRes();
+        int divideIdx=res.getDivideIdx();
+        List<Integer> list1=oldList.subList(0,divideIdx);
+        List<Integer> list2=oldList.subList(divideIdx,oldList.size());
+        Collections.sort(list1);
+        Collections.sort(list2);
     }
 }

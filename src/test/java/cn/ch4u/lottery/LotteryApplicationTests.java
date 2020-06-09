@@ -1,6 +1,5 @@
 package cn.ch4u.lottery;
 
-import cn.ch4u.lottery.constant.LotteryTypeEnum;
 import cn.ch4u.lottery.service.IRecordService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ class LotteryApplicationTests {
 
     @Test
     void testRecommend(){
-        System.out.println(recordService.recommend(LotteryTypeEnum.DaLeTou));
+        //System.out.println(recordService.recommend(LotteryTypeEnum.DaLeTou));
     }
 
 }

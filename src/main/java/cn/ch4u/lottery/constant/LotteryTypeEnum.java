@@ -1,5 +1,8 @@
 package cn.ch4u.lottery.constant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum LotteryTypeEnum {
 
     DaLeTou(

@@ -13,16 +13,15 @@ import java.util.List;
  * 低出现率算法
  */
 @Service
-public class LotteryRecommendLowRate extends BaseLotteryRecommend {
+public class LotteryRecommendHighRate extends BaseLotteryRecommend {
 
     @Override
     public RecommendEnum findCode() {
-        return RecommendEnum.low_rate;
+        return RecommendEnum.high_rate;
     }
 
     @Override
     public RecommendRes recommend(LotteryTypeEnum typeEnum, List<Record> list) {
-
-        return this.commonRec(typeEnum,list,true);
+        return this.commonRec(typeEnum,list,false);
     }
 }

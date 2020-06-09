@@ -28,4 +28,3 @@ custom:
   config:
     dataSrc : JUHE
     needRecords : 56
-    recommend : low_rate

@@ -1,6 +1,7 @@
 package cn.ch4u.lottery.service;
 
 import cn.ch4u.lottery.constant.LotteryTypeEnum;
+import cn.ch4u.lottery.constant.RecommendEnum;
 import cn.ch4u.lottery.entity.RecommendRes;
 import cn.ch4u.lottery.entity.Record;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -29,7 +30,8 @@ public interface IRecordService extends IService<Record> {
     /**
      * 推荐
      * @param typeEnum
+     * @param recommendEnum
      * @return
      */
-    RecommendRes recommend(LotteryTypeEnum typeEnum);
+    RecommendRes recommend(LotteryTypeEnum typeEnum, RecommendEnum recommendEnum);
 }

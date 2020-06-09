@@ -1,8 +1,10 @@
 package cn.ch4u.lottery.service.impl;
 
 import cn.ch4u.lottery.constant.LotteryTypeEnum;
+import cn.ch4u.lottery.constant.RecommendEnum;
 import cn.ch4u.lottery.entity.RecommendRes;
 import cn.ch4u.lottery.entity.Record;
+import cn.ch4u.lottery.factory.RecommendFactory;
 import cn.ch4u.lottery.mapper.RecordMapper;
 import cn.ch4u.lottery.service.ILotteryDataSrc;
 import cn.ch4u.lottery.service.ILotteryRecommend;
@@ -78,9 +80,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
     }
 
     @Override
-    public RecommendRes recommend(LotteryTypeEnum typeEnum) {
+    public RecommendRes recommend(LotteryTypeEnum typeEnum, RecommendEnum recommendEnum) {
         if (typeEnum == null) return null;
-        //获取类型的历史数据
+        //        //获取类型的历史数据
         QueryWrapper<Record> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("typeKey",typeEnum.getKey()).orderByDesc("periodNo");
         Page<Record> page=new Page<>(1,findNeedleastRecords(),false);
@@ -89,9 +91,11 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         List<Record> list=plist.getRecords();
         if (KwHelper.isNullOrEmpty(list)) return null;
         //获取数据
-        ILotteryRecommend srcApi= LotteryUtil.getLotteryRecommend(env);
+        ILotteryRecommend srcApi= RecommendFactory.getInstance(recommendEnum);
         if (srcApi==null)return null;
-        return srcApi.recommend(typeEnum,list);
+        RecommendRes recommendRes=srcApi.recommend(typeEnum,list);
+        LotteryUtil.sortRes(recommendRes);
+        return recommendRes;
     }
 
 

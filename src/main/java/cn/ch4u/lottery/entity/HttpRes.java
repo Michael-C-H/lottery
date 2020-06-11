@@ -7,7 +7,7 @@ public class HttpRes {
     /**
      * 成功返回的代码
      */
-    private static final int SUCCESS_CODE=0;
+    private static final int SUCCESS_CODE=1;
     /**
      * 失败返回的代码
      */

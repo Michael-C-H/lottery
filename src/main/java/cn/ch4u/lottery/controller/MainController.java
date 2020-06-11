@@ -4,6 +4,7 @@ import cn.ch4u.lottery.constant.LotteryTypeEnum;
 import cn.ch4u.lottery.constant.RecommendEnum;
 import cn.ch4u.lottery.entity.HttpRes;
 import cn.ch4u.lottery.service.IRecordService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/")
 public class MainController {
     @Resource

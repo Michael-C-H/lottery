@@ -8,14 +8,11 @@ import cn.ch4u.lottery.service.IRecordService;
 import cn.ch4u.lottery.util.KwHelper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -53,5 +50,28 @@ public class MainController {
         Page<Record> pageR=new Page<>(page,size,true);
         Page<Record> plist=recordService.page(pageR,queryWrapper);
         return new HttpRes(plist);
+    }
+
+    @GetMapping("/custom")
+    public HttpRes custom(String lotteryType,String red,String blue){
+        LotteryTypeEnum typeEnum=LotteryTypeEnum.getEnumByKey(lotteryType);
+        if (typeEnum==null)
+            return new HttpRes("彩票类型错误！",null);
+
+        List<Integer> redList=new ArrayList<>();
+        List<Integer> blueList=new ArrayList<>();
+        try {
+            redList= Arrays.asList(red.split(",")).stream().mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        }catch (Exception e){
+
+        }
+        try {
+            blueList= Arrays.asList(blue.split(",")).stream().mapToInt(Integer::parseInt).boxed().collect(Collectors.toList());
+        }catch (Exception e){
+
+        }
+        return new HttpRes(recordService.custom(typeEnum,redList,blueList));
+
+
     }
 }

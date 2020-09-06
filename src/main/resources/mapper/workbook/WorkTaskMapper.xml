@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ch4u.workbook.mapper.WorkTaskMapper">
+    <insert id="updateOrSave">
+        INSERT into workTask(workType,workDate,workItem,unitPrice,quantity,memo)
+        VALUES(#{workType},#{workDate},#{workItem},#{unitPrice},#{quantity},#{memo})
+        on DUPLICATE key UPDATE workType=#{workType},unitPrice=#{unitPrice},quantity=#{quantity},memo=#{memo}
+    </insert>
+
+    <select id="taskSummary" resultType="cn.ch4u.workbook.vo.Summary">
+        SELECT workDate,max(workType) as workType,count(1) as items,sum(unitPrice*quantity) as money
+        from workTask
+        <where>
+            <if test="param !=null">
+                <if test="param.stDate != null">
+                    and workDate &gt;= #{param.stDate}
+                </if>
+                <if test="param.enDate != null">
+                    and workDate &lt;= #{param.enDate}
+                </if>
+                <if test="param.workItem != null and param.workItem != '' ">
+                    and workItem like concat('%',#{param.workItem},'%')
+                </if>
+            </if>
+        </where>
+        GROUP BY workDate
+        order by workDate desc
+    </select>
+</mapper>

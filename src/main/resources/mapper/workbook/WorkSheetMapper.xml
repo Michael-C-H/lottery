@@ -3,10 +3,10 @@
 <mapper namespace="cn.ch4u.workbook.mapper.WorkSheetMapper">
     <insert id="updateOrSave">
     <selectKey keyProperty="id" order="AFTER" resultType="int">
-        select id from workSheet where mid=#{mid} and workDate=#{workDate}
+        select id from workSheet where mid=#{mid} and workDate=#{workDate} and workType=#{workType}
     </selectKey>
-        INSERT into workSheet(mid,workDate,workStatus)
-        VALUES(#{mid},#{workDate},#{workStatus})
+        INSERT into workSheet(mid,workDate,workStatus,workType)
+        VALUES(#{mid},#{workDate},#{workStatus},#{workType})
         on DUPLICATE key UPDATE workStatus=#{workStatus}
     </insert>
 

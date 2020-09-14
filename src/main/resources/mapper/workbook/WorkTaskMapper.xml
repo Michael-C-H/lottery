@@ -4,11 +4,11 @@
     <insert id="updateOrSave">
         INSERT into workTask(workType,workDate,workItem,unitPrice,quantity,memo)
         VALUES(#{workType},#{workDate},#{workItem},#{unitPrice},#{quantity},#{memo})
-        on DUPLICATE key UPDATE workType=#{workType},unitPrice=#{unitPrice},quantity=#{quantity},memo=#{memo}
+        on DUPLICATE key UPDATE unitPrice=#{unitPrice},quantity=#{quantity},memo=#{memo}
     </insert>
 
     <select id="taskSummary" resultType="cn.ch4u.workbook.vo.Summary">
-        SELECT workDate,max(workType) as workType,count(1) as items,sum(unitPrice*quantity) as money
+        SELECT workDate,workType,count(1) as items,sum(unitPrice*quantity) as money
         from workTask
         <where>
             <if test="param !=null">
@@ -23,7 +23,7 @@
                 </if>
             </if>
         </where>
-        GROUP BY workDate
-        order by workDate desc
+        GROUP BY workDate,workType
+        order by workDate desc , workType asc
     </select>
 </mapper>

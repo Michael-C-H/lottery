@@ -1,16 +1,16 @@
 package cn.ch4u.workbook.entity;
 
-import java.math.BigDecimal;
-
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ public class WorkTask implements Serializable {
     private Integer id;
 
     /**
-     * 工作类型：白班、夜班
+     * 工作类型：0白班、1夜班、2加班
      */
     @TableField("workType")
     private Integer workType;

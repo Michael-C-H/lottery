@@ -2,14 +2,13 @@ package cn.ch4u.workbook.controller;
 
 import cn.ch4u.workbook.entity.WorkSheet;
 import cn.ch4u.workbook.entity.WorkTask;
+import cn.ch4u.workbook.service.ISalaryService;
 import cn.ch4u.workbook.service.IWorkSheetService;
 import cn.ch4u.workbook.service.IWorkTaskService;
 import cn.ch4u.workbook.util.DateUtils;
 import cn.ch4u.workbook.util.KwHelper;
 import cn.ch4u.workbook.vo.HttpRes;
-import cn.ch4u.workbook.vo.Work;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.tomcat.jni.Local;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +29,8 @@ public class WorkController {
     private IWorkSheetService workSheetService;
     @Resource
     private IWorkTaskService workTaskService;
+    @Resource
+    private ISalaryService salaryService;
 
     @RequestMapping("sheets")
     public HttpRes sheets(){
@@ -125,5 +125,26 @@ public class WorkController {
         QueryWrapper<WorkTask> wrapper=new QueryWrapper<>();
         wrapper.eq("workDate",ldate);
         return new HttpRes(workTaskService.getOne(wrapper));
+    }
+
+    /**
+     * 工资汇算
+     * @param date 日期（月汇算:2020-09  日汇算:2020-09-xx）
+     * @return
+     */
+    @RequestMapping("salary")
+    public HttpRes salary(String date){
+        if (KwHelper.isNullOrEmpty(date)){
+            return new HttpRes("参数错误！",null);
+        }
+        LocalDate date1,date2;
+        if (date.length()>7){
+            date1=DateUtils.strToLocalDate(date,"yyyy-MM-dd");
+            date2=date1;
+        }else {
+            date1=DateUtils.strToLocalDate(date,"yyyy-MM").with(TemporalAdjusters.firstDayOfMonth());
+            date2=DateUtils.strToLocalDate(date,"yyyy-MM").with(TemporalAdjusters.lastDayOfMonth());
+        }
+        return new HttpRes(salaryService.calcSalary(date1,date2));
     }
 }

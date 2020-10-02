@@ -145,7 +145,7 @@ public class SalaryServiceImpl implements ISalaryService {
             if (salary.getExtraItems()==null){
                 salary.setExtraItems(items);
             }else {
-                salary.setExtraItems(salary.getWorkItems()+items);
+                salary.setExtraItems(salary.getExtraItems()+items);
             }
             if (salary.getExtraMoney() == null){
                 salary.setExtraMoney(money);

@@ -87,14 +87,15 @@ public class WorkController {
     }
 
     @RequestMapping("taskSummaryDetail")
-    public HttpRes taskSummaryDetail(String date){
-        if (KwHelper.isNullOrEmpty(date)){
+    public HttpRes taskSummaryDetail(String date,Integer workType){
+        if (KwHelper.isNullOrEmpty(date) || workType ==null){
             return new HttpRes("参数错误！",null);
         }
 
         QueryWrapper<WorkTask> wrapper=new QueryWrapper<>();
         wrapper.eq("workDate",DateUtils.strToLocalDate(date,null))
-        .orderByAsc("workItem");
+                .eq("workType",workType)
+                .orderByAsc("workItem");
         return new HttpRes(workTaskService.list(wrapper));
     }
 
@@ -107,13 +108,13 @@ public class WorkController {
     }
 
     @RequestMapping("delTaskByDate")
-    public HttpRes delTask(String date){
-        if (KwHelper.isNullOrEmpty(date)){
+    public HttpRes delTask(String date,Integer workType){
+        if (KwHelper.isNullOrEmpty(date) || workType==null){
             return new HttpRes("参数错误！",null);
         }
         LocalDate ldate=DateUtils.strToLocalDate(date,null);
         QueryWrapper<WorkTask> wrapper=new QueryWrapper<>();
-        wrapper.eq("workDate",ldate);
+        wrapper.eq("workDate",ldate).eq("workType",workType);
         return new HttpRes(workTaskService.remove(wrapper));
     }
     @RequestMapping("findTaskType")
@@ -142,8 +143,8 @@ public class WorkController {
             date1=DateUtils.strToLocalDate(date,"yyyy-MM-dd");
             date2=date1;
         }else {
-            date1=DateUtils.strToLocalDate(date,"yyyy-MM").with(TemporalAdjusters.firstDayOfMonth());
-            date2=DateUtils.strToLocalDate(date,"yyyy-MM").with(TemporalAdjusters.lastDayOfMonth());
+            date1=DateUtils.strToLocalDate(date+"-01","yyyy-MM-dd").with(TemporalAdjusters.firstDayOfMonth());
+            date2=DateUtils.strToLocalDate(date+"-01","yyyy-MM-dd").with(TemporalAdjusters.lastDayOfMonth());
         }
         return new HttpRes(salaryService.calcSalary(date1,date2));
     }
